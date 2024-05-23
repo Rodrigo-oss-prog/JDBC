@@ -12,9 +12,9 @@ public class DepartamentoDAO implements DAO<Departamento>{
 
     @Override
     public void save(Departamento dep) {
-        String sql = "INSERT INTO departamento VALUES (?, ?, ?)";
+        String sql = "INSERT INTO departamento(id, nome, sigla) VALUES (?, ?, ?)";
         try(PreparedStatement stmt = ConnectionFactory.createStatement(sql)){
-
+            stmt.setInt(1, dep.getId());
             stmt.setString(2, dep.getNome());
             stmt.setString(3, dep.getSigla());
             stmt.executeUpdate();
@@ -28,12 +28,15 @@ public class DepartamentoDAO implements DAO<Departamento>{
     }
 
     @Override
-    public void update(Departamento type) {
+    public void update(Departamento dep) {
         String sql = "UPDATE departamento SET nome =? WHERE id =?";
         try {
             PreparedStatement stmt = ConnectionFactory.createStatement(sql);
-            stmt.setString(1, type.getNome());
-            stmt.setInt(2, type.getId());
+
+            stmt.setString(1, dep.getNome());
+            stmt.setString(2, dep.getSigla());
+            stmt.setInt(3, dep.getId());
+
             stmt.executeUpdate();
             stmt.close();
         } catch (SQLException e) {
@@ -45,13 +48,13 @@ public class DepartamentoDAO implements DAO<Departamento>{
     @Override
     public void delete(Departamento type) {
         String sql = "DELETE FROM departamento WHERE id =?";
-        try {
-            PreparedStatement stmt = ConnectionFactory.createStatement(sql);
+        try(PreparedStatement stmt = ConnectionFactory.createStatement(sql)) {
+
             stmt.setInt(1, type.getId());
             stmt.executeUpdate();
-            stmt.close();
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
     }
@@ -64,7 +67,8 @@ public class DepartamentoDAO implements DAO<Departamento>{
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
-                dep = new Departamento(rs.getString("nome"),
+                dep = new Departamento(rs.getInt("id")
+                        ,rs.getString("nome"),
                         rs.getString("sigla"));
 
             }
@@ -84,7 +88,8 @@ public class DepartamentoDAO implements DAO<Departamento>{
         try(PreparedStatement stmt = ConnectionFactory.createStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
-                Departamento dep = new Departamento(rs.getString("nome"),
+                Departamento dep = new Departamento(rs.getInt("id"),
+                        rs.getString("nome"),
                         rs.getString("sigla"));
 
                 departamentos.add(dep);
