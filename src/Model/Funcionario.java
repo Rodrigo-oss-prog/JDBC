@@ -1,14 +1,15 @@
 package Model;
 public class Funcionario {
     private int id;
-    private String nome;
     private String cpf;
+    private String nome;
+
     private Departamento departamento;
 
-    public Funcionario( String nome, String cpf, Departamento departamento) {
-        // this.id = id;
-        this.nome = nome;
+    public Funcionario(int id, String cpf, String nome, Departamento departamento) {
+        this.id = id;
         this.cpf = cpf;
+        this.nome = nome;
         this.departamento = departamento;
     }
 
@@ -20,20 +21,20 @@ public class Funcionario {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getCpf() {
         return cpf;
     }
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public Departamento getDepartamento() {
@@ -48,9 +49,9 @@ public class Funcionario {
     public String toString() {
         return "Funcionario{" +
                 "id=" + id +
-                ", nome='" + nome + '\'' +
                 ", cpf='" + cpf + '\'' +
-                ", departamento=" + departamento +
+                ", nome='" + nome + '\'' +
+                ", departamento=" + departamento.getNome() +
                 '}';
     }
 }

@@ -13,10 +13,10 @@ public class FuncionarioDAO implements DAO<Funcionario>{
     public void save(Funcionario func) {
         String sql = "INSERT INTO funcionario VALUES ( ?, ?, ?, ?)";
         try(PreparedStatement stmt = ConnectionFactory.createStatement(sql)){
-
-            stmt.setString(2, func.getNome());
-            stmt.setString(3, func.getCpf());
-            stmt.setString(4, func.getDepartamento().getNome());
+            stmt.setInt(1, func.getId());
+            stmt.setString(2, func.getCpf());
+            stmt.setString(3, func.getNome());
+            stmt.setInt(4, func.getDepartamento().getId());
             stmt.executeUpdate();
 
         }catch (SQLException e){
@@ -29,10 +29,12 @@ public class FuncionarioDAO implements DAO<Funcionario>{
     public void update(Funcionario func) {
         String sql = "UPDATE funcionario SET nome =?, cpf =?, departamento =? WHERE id =?";
         try(PreparedStatement stmt = ConnectionFactory.createStatement(sql)){
-            stmt.setString(1, func.getNome());
-            stmt.setString(2, func.getCpf());
+
+            stmt.setString(1, func.getCpf());
+            stmt.setString(2, func.getNome());
             stmt.setString(3, func.getDepartamento().getNome());
             stmt.setInt(4, func.getId());
+
             stmt.executeUpdate();
 
         }catch (SQLException e){
@@ -62,7 +64,7 @@ public class FuncionarioDAO implements DAO<Funcionario>{
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 Departamento dep = new DepartamentoDAO().findById(rs.getInt("departamento"));
-                 func = new Funcionario(rs.getString("nome"), rs.getString("cpf"),
+                 func = new Funcionario(rs.getInt("id"),rs.getString("nome"), rs.getString("cpf"),
                         dep);
 
 
@@ -82,7 +84,8 @@ public class FuncionarioDAO implements DAO<Funcionario>{
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 Departamento dep = new DepartamentoDAO().findById(rs.getInt("departamento"));
-                Funcionario func = new Funcionario(rs.getString("nome"), rs.getString("cpf"),
+                Funcionario func = new Funcionario(rs.getInt("id"),rs.getString("nome"),
+                        rs.getString("cpf"),
                         dep);
                 funcs.add(func);
             }
